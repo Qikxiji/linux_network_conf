@@ -1,0 +1,70 @@
+# network interface settings;
+# Please do NOT modify this file directly, unless you know what
+# you're doing.
+#
+# If you want to manage parts of the network configuration manually,
+# please utilize the 'source' or 'source-directory' directives to do
+# so.
+# PVE will preserve these directives, but will NOT read its network
+# configuration from sourced files, so do not attempt to move any of
+# the PVE managed interfaces into external files!
+
+
+#enable loopback
+auto lo
+iface lo inet loopback
+
+#wlp1s0 - wi-fi if
+#off config for wi-fi if
+iface wlp1s0 inet manual
+
+
+# enxa42a952efaf7 - name of main if (physical link)
+# manual - if will not be auto configured
+iface enxa42a952efaf7 inet manual
+
+#virtual bridge with static config, include main if
+#"address" - set here your public ip
+#"gateway" - set here your gate
+#VM's and CT's woll NOT be connected to this vmbr
+auto vmbr0
+iface vmbr0 inet static
+	address 192.168.0.33/24
+	gateway 192.168.0.1
+	bridge-ports enxa42a952efaf7
+	bridge-stp off
+	bridge-fd 0
+
+
+#virtual bridge for NAT config
+#"address" - set ip from your internal network for VM's and CT's
+#VM's and CT's will be connected to this (vmbr1)
+auto vmbr1
+iface vmbr1 inet static
+	address 10.10.10.1/24
+	bridge-ports none
+	bridge-stp off
+	bridge-fd 0
+
+#enable traffic forwarding from internal network (-s _._._._/24)
+#to bridge with public ip (-o vmbr0) using NAT
+post-up echo 1 > /proc/sys/net/ipv4/ip_forward
+post-up iptables -t nat -A POSTROUTING -s '10.10.10.0/24' -o vmbr0 -j MASQUERADE
+post-down iptables -t nat -D POSTROUTING -s '10.10.10.0/24' -o vmbr0 -j MASQUERADE
+
+#to get ability to connect to VM's and CT's behind NAT you should configure port forwarding
+#in this exampe I use public ip and different ports to connect PVE, VM's, and CT's:
+#public_ip:22 - ssh connect to PVE with default port
+#public_ip:2222 - ssh connect to VM/CT on socket 10.10.10.2:22
+#public_ip:2233 - ssh connect to VM/CT on socket 10.10.10.3:22
+#public_ip:8080 - http connect to VM/CT on socket 10.10.10.4:8080
+#edit and continue with your redirects
+post-up iptables -t nat -A PREROUTING  -p tcp --dport 2222 -j DNAT --to-destination 10.10.10.2:22
+post-up iptables -t nat -A PREROUTING  -p tcp --dport 2233 -j DNAT --to-destination 10.10.10.3:22
+post-up iptables -t nat -A PREROUTING  -p tcp --dport 8080 -j DNAT --to-destination 10.10.10.4:8080
+
+post-down iptables -t nat -D PREROUTING  -p tcp --dport 2222 -j DNAT --to-destination 10.10.10.2:22
+post-down iptables -t nat -D PREROUTING  -p tcp --dport 2233 -j DNAT --to-destination 10.10.10.3:22
+post-down iptables -t nat -D PREROUTING  -p tcp --dport 8080 -j DNAT --to-destination 10.10.10.4:8080
+
+source /etc/network/interfaces.d/*
