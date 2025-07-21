@@ -1,14 +1,14 @@
 network:
   version: 2
-  renderer: networkd
+  renderer: networkd            #active network service (systemctl is-active systemd-networkd)
   ethernets:
-    enp3s0:
+    enp3s0:                     #if name
       dhcp4: false
       addresses:
-          - 192.168.0.11/24
+          - 192.168.0.11/24     #if ip add
       routes:
-          - to: default
+          - to: default         #gateway route
             via: 192.168.0.1
       nameservers:
           addresses:
-              - 192.168.0.1
+              - 192.168.0.1     #dns server

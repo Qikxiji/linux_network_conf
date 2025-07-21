@@ -1,0 +1,6 @@
+network:
+  version: 2               #yaml version
+  renderer: networkd       #active network service (systemctl is-active systemd-networkd)
+  ethernets:
+    enp3s0:                #if name (ip a)
+      dhcp4: true
