@@ -15,34 +15,34 @@
 
 <img src=".git_img/services.png" alt="Описание изображения" width="500px">
 
-Файлы конфигурации netplan в данном репозитории настроены на использование службы systemd-networkd, а не NetworkManager. Для корректной работы необходимо убедиться, что данная служба активна. Если нет, то требуется активировать `systemctl enable systemd-networkd.service` и запустить `systemctl start systemd-networkd.service` ее.
+Файлы конфигурации netplan в данном репозитории настроены на использование службы systemd-networkd, а не NetworkManager. Для корректной работы необходимо убедиться, что данная служба активна. Если нет, то требуется активировать `systemctl enable systemd-networkd.service` и запустить `systemctl start systemd-networkd.service` ее. Альтернативный вариант, если вы хотите использовать NetworkManager - изменить параметр `renderer:` с "networkd" на "NetworkManager".
 
 ## Структура репозитория:
 
 ```  
 ├── ifupdown2/  # Директория c файлами конфигурации ifupdown2
 │
-│            ├── interfaces-dhcp            # Получение IP по DHCP
+│        ├── interfaces-dhcp            # Получение IP по DHCP
 │
-│            ├── interfaces-double-ip       # Настройка интерфейса с 2 IP
+│        ├── interfaces-double-ip       # Настройка интерфейса с 2 IP
 │
-│            ├── interfaces-routes          # Пример сохранения маршрутов с помощью post-up и pre-down
+│        ├── interfaces-routes          # Пример сохранения маршрутов с помощью post-up и pre-down
 │
-│            ├── interfaces-static          # Конфигурация статического IP
+│        ├── interfaces-static          # Конфигурация статического IP
 │  
 ├── netplan/  # Директория c файлами конфигурации netplan
 │
-│            ├── 99-netplan-dhcp.yaml       # Получение IP по DHCP
+│        ├── 99-netplan-dhcp.yaml       # Получение IP по DHCP
 │
-│            ├── 99-netplan-static.yaml     # Конфигурация статического IP
+│        ├── 99-netplan-static.yaml     # Конфигурация статического IP
 │
 ├── proxmox/  # Директория c файлами конфигурации ifupdown2 для Proxmox
 │
-│            ├── interfaces-bridge-dhcp     # Конфигурация одного vmbr с получением IP по DHCP
+│        ├── interfaces-bridge-dhcp     # Конфигурация одного vmbr с получением IP по DHCP
 │
-│            ├── interfaces-bridge-static   # Конфигурация одного vmbr со статическим IP
+│        ├── interfaces-bridge-static   # Конфигурация одного vmbr со статическим IP
 │
-│            ├── interfaces-nat             # Конфигурация двух vmbr для организации NAT 
+│        ├── interfaces-nat             # Конфигурация двух vmbr для организации NAT 
 
 ```
 
