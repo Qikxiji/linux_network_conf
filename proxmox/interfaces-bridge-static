@@ -1,0 +1,20 @@
+source /etc/network/interfaces.d/*
+
+#enable loopback
+auto lo
+iface lo inet loopback
+
+#enp3s0 - name of main if (physical link)
+iface enp3s0 inet manual
+
+#virtual bridge with static config, include main if
+#"address" - set here your public ip
+#"gateway" - set here your gate
+#VM's and CT's will be connected to this vmbr
+auto vmbr0
+iface vmbr0 inet static
+        address 192.168.0.33/24
+        gateway 192.168.0.1
+        bridge-ports enp3s0
+        bridge-stp off
+        bridge-fd 0

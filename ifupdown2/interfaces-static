@@ -1,0 +1,9 @@
+source /etc/network/interfaces.d/*
+
+auto lo
+iface lo inet loopback
+
+auto enp3s0
+iface enp3s0 inet static
+	    address 10.10.1.5/24
+      gateway 10.10.1.1

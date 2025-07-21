@@ -1,0 +1,13 @@
+source /etc/network/interfaces.d/*
+
+auto lo
+iface lo inet loopback
+
+auto enp3s0
+iface enp3s0 inet static
+	    address 10.10.1.5/24
+      gateway 10.10.1.1
+      post-up route add -net 10.20.20.0 netmask 255.255.255.0 gw 10.10.1.1
+      post-up route add -net 172.20.1.0 netmask 255.255.255.0 gw 10.10.1.1
+      pre-down route del -net 10.20.20.0 netmask 255.255.255.0 gw 10.10.1.1
+      pre-down route del -net 172.20.1.0 netmask 255.255.255.0 gw 10.10.1.1

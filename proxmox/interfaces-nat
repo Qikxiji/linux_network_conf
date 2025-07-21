@@ -26,7 +26,7 @@ iface enxa42a952efaf7 inet manual
 #virtual bridge with static config, include main if
 #"address" - set here your public ip
 #"gateway" - set here your gate
-#VM's and CT's woll NOT be connected to this vmbr
+#VM's and CT's will NOT be connected to this vmbr
 auto vmbr0
 iface vmbr0 inet static
 	address 192.168.0.33/24

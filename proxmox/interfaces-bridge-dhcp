@@ -1,0 +1,17 @@
+source /etc/network/interfaces.d/*
+
+#enable loopback
+auto lo
+iface lo inet loopback
+
+# enp3s0 - name of main if (physical link)
+# manual - if will not be auto configured
+iface enp3s0 inet manual
+
+#virtual bridge with dhcp config, include main if
+#VM's and CT's will be connected to this vmbr
+auto vmbr0
+iface vmbr0 inet dhcp
+			bridge-ports enp3s0
+			bridge-stp off
+			bridge-fd 0
